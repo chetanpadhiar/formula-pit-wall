@@ -1,4 +1,4 @@
-# Chetan's Pit Wall · F1 2026
+# Formula One Pit Wall · F1 2026
 
 An editorial-style Formula 1 dashboard built as a single HTML file.
 Combines live race data with a custom pit stop strategy optimiser —
