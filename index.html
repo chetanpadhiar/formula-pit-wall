@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chetan's Pit Wall · F1 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f5f3ee; --dark: #0d0d0d; --red: #e8001d; --text: #111111; --muted: #888888; --rule: #d0ccc4;
+    --merc: #00d2be; --ferr: #dc0000; --mcl: #ff8000; --rb: #3671c6; --alp: #0090ff; --haas: #b6babd;
+    --aston: #006f5f; --will: #64c4ff; --audi: #9b8b7a; --cad: #b8963e; --rbulls: #6692ff;
+    --font-display: 'Bodoni 72','Libre Baskerville',Georgia,serif;
+    --font-body: 'Big Caslon','IM Fell English','Libre Baskerville',Georgia,serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { background:var(--bg); color:var(--text); font-family:var(--font-body); font-size:14px; line-height:1.5; overflow-x:hidden; }
+
+  /* TICKER */
+  #ticker { background:var(--dark); color:#ccc; height:32px; display:flex; align-items:center; overflow:hidden; position:sticky; top:0; z-index:100; border-bottom:2px solid var(--red); }
+  .ticker-inner { display:flex; white-space:nowrap; animation:ticker-scroll 45s linear infinite; }
+  .ticker-item { padding:0 32px; font-family:var(--font-body); font-size:10px; letter-spacing:.15em; text-transform:uppercase; color:#aaa; border-right:1px solid #333; }
+  .ticker-item span { color:var(--red); font-weight:700; }
+  @keyframes ticker-scroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+  /* MASTHEAD */
+  #masthead { background:var(--bg); padding:12px 40px 0; border-bottom:1px solid var(--rule); }
+  .masthead-top { display:flex; justify-content:space-between; align-items:flex-start; padding-bottom:4px; border-bottom:1px solid var(--rule); margin-bottom:8px; }
+  .masthead-eyebrow { font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); display:flex; align-items:center; gap:6px; }
+  .masthead-greeting { font-size:11px; color:var(--muted); text-align:right; font-style:italic; }
+  .masthead-title { padding:8px 0 12px; line-height:1; }
+  .masthead-title .line1 { font-family:var(--font-display); font-size:78px; font-weight:700; color:var(--text); display:block; letter-spacing:-.02em; line-height:1; }
+  .masthead-title .line2 { font-family:var(--font-display); font-size:78px; font-weight:700; font-style:italic; color:var(--red); display:block; letter-spacing:-.02em; line-height:1; }
+  .masthead-rule { height:3px; background:var(--red); margin:0 0 10px; }
+  .masthead-bar { display:flex; justify-content:space-between; align-items:center; padding-bottom:12px; }
+  .live-badge { background:var(--red); color:#fff; font-size:9px; letter-spacing:.25em; text-transform:uppercase; padding:4px 10px; display:inline-flex; align-items:center; gap:5px; }
+  .live-dot { width:6px; height:6px; background:#fff; border-radius:50%; animation:pulse 1.2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+  .masthead-nav { display:flex; gap:20px; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); }
+  .masthead-nav a { color:var(--muted); text-decoration:none; } .masthead-nav a:hover { color:var(--red); }
+
+  /* SECTIONS */
+  .section { padding:0 40px; }
+  .section-rule { height:1px; background:var(--rule); margin:0 40px; }
+  .section-header { padding:24px 0 16px; display:flex; justify-content:space-between; align-items:baseline; }
+  .stb { font-family:var(--font-display); font-size:28px; font-weight:700; color:var(--text); }
+  .str { font-family:var(--font-display); font-size:28px; font-weight:700; font-style:italic; color:var(--red); }
+  .section-meta { font-size:10px; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); }
+
+  /* HERO */
+  #hero { margin:0 40px; background:var(--dark); color:#fff; padding:28px 32px 24px; position:relative; overflow:hidden; min-height:220px; }
+  .hero-checkered { position:absolute; top:0; right:0; width:140px; height:100%; background-image:repeating-conic-gradient(#222 0% 25%,#111 0% 50%); background-size:18px 18px; opacity:.6; }
+  .hero-content { position:relative; z-index:2; display:flex; justify-content:space-between; align-items:flex-start; }
+  .hero-left { flex:1; max-width:55%; }
+  .hero-right { text-align:right; min-width:220px; }
+  .round-badge { display:inline-flex; align-items:center; gap:8px; border:1px solid var(--red); padding:3px 10px; margin-bottom:10px; }
+  .round-badge span { font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--red); }
+  .rbdot { width:5px; height:5px; background:var(--red); border-radius:50%; animation:pulse 1.2s ease-in-out infinite; }
+  .hero-country { font-size:13px; letter-spacing:.15em; color:#ccc; margin-bottom:4px; }
+  .hero-race-name { font-family:var(--font-display); font-size:46px; font-weight:700; line-height:1; color:#fff; }
+  .hero-race-name em { color:var(--red); font-style:italic; }
+  .hero-sub { font-size:11px; color:#888; margin-top:8px; letter-spacing:.05em; }
+  .hero-stats { display:flex; gap:28px; margin-top:20px; padding-top:14px; border-top:1px solid #333; }
+  .hsl { font-size:8px; letter-spacing:.18em; text-transform:uppercase; color:#666; margin-bottom:2px; }
+  .hsv { font-family:var(--font-display); font-size:15px; font-weight:700; color:#fff; }
+  .cd-label-top { font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:var(--red); margin-bottom:10px; display:flex; align-items:center; gap:5px; justify-content:flex-end; }
+  .countdown-blocks { display:flex; gap:6px; justify-content:flex-end; }
+  .cd-block { background:#111; border:1px solid #333; padding:10px 8px 6px; min-width:58px; text-align:center; }
+  .cd-num { font-family:var(--font-display); font-size:32px; font-weight:700; color:#fff; line-height:1; display:block; }
+  .cd-sub { font-size:8px; letter-spacing:.2em; text-transform:uppercase; color:#555; display:block; margin-top:4px; }
+
+  /* CALENDAR */
+  #calendar-strip { overflow-x:auto; padding:0 40px 16px; scrollbar-width:thin; scrollbar-color:var(--red) transparent; }
+  .calendar-row { display:flex; gap:0; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); border-left:1px solid var(--rule); }
+  .cal-card { min-width:110px; padding:10px 12px; border-right:1px solid var(--rule); flex-shrink:0; }
+  /* all cards carry their own right border — no special last-child rule */
+  .cal-card.past { opacity:.5; }
+  .cal-card.next { background:var(--dark); color:#fff; min-width:130px; border-right:1px solid #333; }
+  .cal-card.next .cal-num,.cal-card.next .cal-code,.cal-card.next .cal-country,.cal-card.next .cal-city,.cal-card.next .cal-dates { color:#fff; }
+  .cal-num { font-size:8px; letter-spacing:.15em; text-transform:uppercase; color:var(--muted); margin-bottom:3px; }
+  .cal-num-next { display:flex; align-items:center; gap:5px; font-size:8px; letter-spacing:.15em; text-transform:uppercase; color:var(--red); margin-bottom:3px; }
+  .cal-code { font-family:var(--font-display); font-size:22px; font-weight:700; color:var(--text); line-height:1; margin-bottom:1px; }
+  .cal-country { font-size:8px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+  .cal-city { font-size:13px; font-weight:700; color:var(--text); margin:2px 0; }
+  .cal-dates { font-size:9px; color:var(--muted); }
+  .cal-winner { font-size:8px; color:var(--red); margin-top:3px; }
+
+  /* STRATEGY LAB */
+  #strategy { margin:0 40px; background:var(--dark); color:#fff; padding:28px 32px; }
+  .strategy-controls { display:grid; grid-template-columns:1fr 1fr 1fr auto; gap:16px; align-items:end; margin-bottom:24px; }
+  .ctrl-group label { display:block; font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:#666; margin-bottom:6px; }
+  .ctrl-select,.ctrl-input { width:100%; background:#111; border:1px solid #333; color:#fff; padding:10px 12px; font-family:var(--font-body); font-size:13px; appearance:none; outline:none; }
+  .ctrl-select:focus,.ctrl-input:focus { border-color:var(--red); }
+  .tyre-options { display:flex; gap:8px; }
+  .tyre-btn { flex:1; background:#111; border:1px solid #333; color:#ccc; padding:9px 6px; font-family:var(--font-body); font-size:11px; letter-spacing:.05em; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:5px; }
+  .tyre-btn.active-soft { border-color:var(--red); color:#fff; background:#1a0002; }
+  .tyre-btn.active-medium { border-color:#f5c300; color:#fff; background:#1a1500; }
+  .tyre-btn.active-hard { border-color:#fff; color:#fff; background:#1a1a1a; }
+  .tyre-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .tyre-dot.soft { background:var(--red); } .tyre-dot.medium { background:#f5c300; } .tyre-dot.hard { background:#fff; }
+  .optimise-btn { background:var(--red); border:none; color:#fff; padding:10px 24px; font-family:var(--font-body); font-size:10px; letter-spacing:.25em; text-transform:uppercase; cursor:pointer; height:42px; align-self:end; }
+  .optimise-btn:hover { background:#b8001a; }
+  #strategy-output { display:none; } #strategy-output.visible { display:block; }
+  .output-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .output-card { background:#111; border:1px solid #222; padding:16px; }
+  .output-card-title { font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:#555; margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid #1e1e1e; }
+  .pit-rec { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+  .pit-lap { font-family:var(--font-display); font-size:28px; font-weight:700; }
+  .pit-label { font-size:10px; color:#666; }
+  .ug { color:#22c55e; } .ua { color:#f59e0b; } .ur { color:var(--red); }
+  .strat-table { width:100%; border-collapse:collapse; }
+  .strat-table th { font-size:8px; letter-spacing:.15em; text-transform:uppercase; color:#555; text-align:left; padding:4px 0 8px; border-bottom:1px solid #222; }
+  .strat-table td { padding:8px 0; border-bottom:1px solid #1a1a1a; font-size:12px; color:#ccc; }
+  .strat-table td:last-child { text-align:right; font-family:var(--font-display); color:#fff; }
+  .best-badge { background:var(--red); color:#fff; font-size:7px; letter-spacing:.1em; padding:2px 5px; text-transform:uppercase; margin-left:6px; }
+  .alert-box { border-left:3px solid var(--red); padding:10px 12px; background:#1a0002; margin-bottom:8px; font-size:12px; }
+  .alert-box.amber { border-color:#f59e0b; background:#1a1200; }
+  .alert-title { font-size:8px; letter-spacing:.2em; text-transform:uppercase; color:var(--red); margin-bottom:4px; }
+  .alert-title.at-amber { color:#f59e0b; }
+  .mc-pct { font-family:var(--font-display); font-size:22px; font-weight:700; color:#fff; margin-bottom:4px; }
+  .mc-bar { height:6px; background:#222; margin:6px 0 4px; }
+  .mc-fill { height:100%; background:var(--red); transition:width .8s ease; }
+  .mc-fill.good { background:#22c55e; }
+
+  /* THREE COLUMNS */
+  #three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0; border:1px solid var(--rule); margin:0 40px; }
+  .col { padding:0 20px 20px; border-right:1px solid var(--rule); }
+  .col:last-child { border-right:none; }
+  .col-header { padding:16px 0 12px; border-bottom:1px solid var(--rule); margin-bottom:12px; }
+  .col-num { font-size:8px; letter-spacing:.2em; color:var(--muted); text-transform:uppercase; margin-bottom:3px; }
+
+  .driver-row { display:flex; align-items:center; gap:10px; padding:7px 0 7px 8px; border-bottom:1px solid var(--rule); position:relative; }
+  .driver-row::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; }
+  .dr-merc::before{background:var(--merc)} .dr-ferr::before{background:var(--ferr)} .dr-mcl::before{background:var(--mcl)}
+  .dr-rb::before{background:var(--rb)} .dr-alp::before{background:var(--alp)} .dr-haas::before{background:var(--haas)}
+  .dr-aston::before{background:var(--aston)} .dr-will::before{background:var(--will)} .dr-audi::before{background:var(--audi)}
+  .dr-cad::before{background:var(--cad)} .dr-rbulls::before{background:var(--rbulls)}
+  .dr-rank { font-size:10px; color:var(--muted); width:18px; flex-shrink:0; }
+  .dr-name { flex:1; font-size:12px; font-weight:700; }
+  .dr-team { font-size:9px; color:var(--muted); }
+  .dr-flag { display:inline-block; padding:1px 5px; font-size:8px; font-weight:700; color:#fff; border-radius:1px; margin-right:2px; }
+  .dr-pts { font-family:var(--font-display); font-size:20px; font-weight:700; color:var(--text); margin-left:auto; }
+
+  .team-row { padding:8px 0; border-bottom:1px solid var(--rule); }
+  .team-row-top { display:flex; align-items:center; gap:8px; margin-bottom:5px; }
+  .tm-rank { font-size:10px; color:var(--muted); width:18px; }
+  .tm-name { flex:1; font-size:12px; font-weight:700; }
+  .tm-pts { font-family:var(--font-display); font-size:18px; font-weight:700; }
+  .tm-pu { font-size:9px; color:var(--muted); }
+  .tm-bar { height:3px; background:var(--rule); margin-left:26px; }
+
+  .laptime-row { display:flex; align-items:center; gap:8px; padding:5px 0; border-bottom:1px solid var(--rule); }
+  .lt-pos { font-size:10px; font-weight:700; width:18px; color:var(--muted); }
+  .lt-name { flex:1; font-size:11px; }
+  .lt-time { font-family:var(--font-display); font-size:13px; font-weight:700; color:var(--text); }
+  .news-item { padding:9px 0; border-bottom:1px solid var(--rule); }
+  .news-tag { display:inline-block; background:var(--red); color:#fff; font-size:7px; letter-spacing:.15em; text-transform:uppercase; padding:2px 6px; margin-bottom:5px; }
+  .news-tag.debut{background:#22c55e;color:#000} .news-tag.cal{background:#555} .news-tag.eng{background:#f59e0b;color:#000}
+  .news-headline { font-size:12px; font-weight:700; line-height:1.35; margin-bottom:3px; }
+  .news-body { font-size:10px; color:var(--muted); line-height:1.45; }
+
+  /* FOOTER STATS */
+  #footer-stats { background:var(--dark); color:#fff; margin:0 40px; padding:24px 32px; display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:0; }
+  .fstat { padding:0 24px 0 0; border-right:1px solid #222; }
+  .fstat:last-child { border-right:none; padding-right:0; padding-left:24px; }
+  .fstat:first-child { padding-left:0; }
+  .fstat:nth-child(2),.fstat:nth-child(3) { padding-left:24px; }
+  .fstat-label { font-size:8px; letter-spacing:.2em; text-transform:uppercase; color:#555; margin-bottom:6px; }
+  .fstat-val { font-family:var(--font-display); font-size:26px; font-weight:700; color:#fff; line-height:1; margin-bottom:3px; }
+  .fstat-val.red { color:var(--red); }
+  .fstat-sub { font-size:10px; color:#666; }
+
+  #page-bottom { padding:10px 40px; border-top:1px solid var(--rule); }
+  .bottom-text { font-size:9px; letter-spacing:.12em; color:var(--muted); text-transform:uppercase; }
+
+  /* ══════════════════════════════
+     MOBILE — max-width 768px
+  ══════════════════════════════ */
+  @media (max-width: 768px) {
+
+    /* Base padding narrowed */
+    .section { padding:0 16px; }
+    .section-rule { margin:0 16px; }
+
+    /* MASTHEAD */
+    #masthead { padding:10px 16px 0; }
+    .masthead-top { flex-direction:column; gap:4px; }
+    .masthead-greeting { text-align:left; font-size:10px; }
+    .masthead-title .line1 { font-size:48px; }
+    .masthead-title .line2 { font-size:48px; }
+    .masthead-bar { flex-direction:column; align-items:flex-start; gap:10px; padding-bottom:10px; }
+    .masthead-nav { flex-wrap:wrap; gap:10px 16px; font-size:9px; }
+
+    /* HERO */
+    #hero { margin:0 16px; padding:20px 18px 18px; min-height:unset; }
+    .hero-content { flex-direction:column; gap:20px; }
+    .hero-left { max-width:100%; }
+    .hero-right { text-align:left; min-width:unset; width:100%; }
+    .hero-race-name { font-size:34px; }
+    .hero-stats { gap:16px; flex-wrap:wrap; }
+    .cd-label-top { justify-content:flex-start; }
+    .countdown-blocks { justify-content:flex-start; }
+    .cd-block { min-width:52px; padding:8px 6px 5px; }
+    .cd-num { font-size:26px; }
+    .hero-checkered { width:80px; opacity:.3; }
+
+    /* CALENDAR */
+    #calendar-strip { padding:0 16px 12px; }
+    .cal-card { min-width:90px; padding:8px 10px; border-right:1px solid var(--rule); }
+    .cal-card.next { min-width:110px; }
+    .cal-code { font-size:18px; }
+
+    /* STRATEGY LAB */
+    #strategy { margin:0 16px; padding:20px 16px; }
+    .strategy-controls { grid-template-columns:1fr 1fr; gap:12px; }
+    .strategy-controls .ctrl-group:first-child { grid-column:1 / -1; }
+    .optimise-btn { grid-column:1 / -1; width:100%; height:44px; font-size:11px; }
+    .output-grid { grid-template-columns:1fr; }
+
+    /* THREE COLUMNS — stack vertically */
+    #three-col { grid-template-columns:1fr; margin:0 16px; }
+    .col { border-right:none; border-bottom:1px solid var(--rule); padding:0 16px 16px; }
+    .col:last-child { border-bottom:none; }
+
+    /* SECTION TITLES */
+    .stb { font-size:22px; }
+    .str { font-size:22px; }
+    .section-header { flex-direction:column; gap:4px; padding:16px 0 12px; }
+
+    /* FOOTER STATS — 2x2 grid */
+    #footer-stats { grid-template-columns:1fr 1fr; gap:1px; margin:0 16px; padding:0; background:#222; }
+    .fstat { padding:16px; border-right:none; background:var(--dark); }
+    .fstat:nth-child(2),.fstat:nth-child(3) { padding-left:16px; }
+    .fstat-val { font-size:20px; }
+
+    #page-bottom { padding:10px 16px; }
+  }
+
+  /* ══════════════════════════════
+     SMALL PHONES — max-width 420px
+  ══════════════════════════════ */
+  @media (max-width: 420px) {
+    .masthead-title .line1 { font-size:38px; }
+    .masthead-title .line2 { font-size:38px; }
+    .hero-race-name { font-size:28px; }
+    .cd-block { min-width:44px; }
+    .cd-num { font-size:22px; }
+    .strategy-controls { grid-template-columns:1fr; }
+    .strategy-controls .ctrl-group:first-child { grid-column:1; }
+    .optimise-btn { grid-column:1; }
+    #footer-stats { grid-template-columns:1fr; }
+    .fstat { border-bottom:1px solid #222; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div id="ticker"><div class="ticker-inner" id="ticker-inner"></div></div>
+
+<!-- MASTHEAD -->
+<header id="masthead">
+  <div class="masthead-top">
+    <div class="masthead-eyebrow">⬛⬜ Personal Edition &nbsp;·&nbsp; F1 2026</div>
+    <div class="masthead-greeting" id="greeting"></div>
+  </div>
+  <div class="masthead-title">
+    <span class="line1">Chetan's</span>
+    <span class="line2">Pit Wall.</span>
+  </div>
+  <div class="masthead-rule"></div>
+  <div class="masthead-bar">
+    <div class="live-badge"><span class="live-dot"></span> Live Edition</div>
+    <nav class="masthead-nav">
+      <a href="#drivers">Drivers</a><a href="#constructors">Constructors</a>
+      <a href="#paddock">Paddock</a><a href="#calendar-strip">Calendar</a>
+      <a href="#strategy">Strategy Lab</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO — British GP (Round 9, UP NEXT) -->
+<div style="padding:20px 40px 0">
+  <div id="hero">
+    <div class="hero-checkered"></div>
+    <div class="hero-content">
+      <div class="hero-left">
+        <div class="round-badge"><span class="rbdot"></span><span>Round 09 · Up Next</span></div>
+        <div class="hero-country">GB &nbsp;·&nbsp; GREAT BRITAIN</div>
+        <div class="hero-race-name">British <em>Grand<br>Prix</em></div>
+        <div class="hero-sub">Silverstone Circuit · Round 9 of 22 · 52 laps · 306.198 km</div>
+        <div class="hero-stats">
+          <div><div class="hsl">Lap Record</div><div class="hsv">1:27.097</div></div>
+          <div><div class="hsl">Pole 2025</div><div class="hsv">L. Norris</div></div>
+          <div><div class="hsl">Dates</div><div class="hsv">Jul 03-05</div></div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="cd-label-top"><span class="rbdot"></span> Lights Out In</div>
+        <div class="countdown-blocks">
+          <div class="cd-block"><span class="cd-num" id="cd-d">00</span><span class="cd-sub">Days</span></div>
+          <div class="cd-block"><span class="cd-num" id="cd-h">00</span><span class="cd-sub">Hours</span></div>
+          <div class="cd-block"><span class="cd-num" id="cd-m">00</span><span class="cd-sub">Mins</span></div>
+          <div class="cd-block"><span class="cd-num" id="cd-s">00</span><span class="cd-sub">Secs</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CALENDAR -->
+<div class="section">
+  <div class="section-header">
+    <div><span class="stb">Season </span><span class="str">Calendar</span></div>
+    <div class="section-meta">22 Rounds · 2026 Season</div>
+  </div>
+</div>
+<div id="calendar-strip"><div class="calendar-row" id="calendar-row"></div></div>
+<div class="section-rule" style="margin-top:16px"></div>
+
+<!-- STRATEGY LAB -->
+<div class="section">
+  <div class="section-header">
+    <div>
+      <div class="section-meta" style="margin-bottom:4px">§ 05</div>
+      <span class="stb">Strategy </span><span class="str">Lab</span>
+    </div>
+    <div class="section-meta">Pit Stop Optimizer · Live Data</div>
+  </div>
+</div>
+<div id="strategy">
+  <div class="strategy-controls">
+    <div class="ctrl-group">
+      <label>Driver</label>
+      <select class="ctrl-select" id="strat-driver">
+        <optgroup label="Mercedes">
+          <option>K. Antonelli — Mercedes</option>
+          <option>G. Russell — Mercedes</option>
+        </optgroup>
+        <optgroup label="Ferrari">
+          <option>L. Hamilton — Ferrari</option>
+          <option>C. Leclerc — Ferrari</option>
+        </optgroup>
+        <optgroup label="McLaren">
+          <option>L. Norris — McLaren</option>
+          <option>O. Piastri — McLaren</option>
+        </optgroup>
+        <optgroup label="Red Bull Racing">
+          <option>M. Verstappen — Red Bull Racing</option>
+          <option>I. Hadjar — Red Bull Racing</option>
+        </optgroup>
+        <optgroup label="Alpine">
+          <option>P. Gasly — Alpine</option>
+          <option>F. Colapinto — Alpine</option>
+        </optgroup>
+        <optgroup label="Racing Bulls">
+          <option>L. Lawson — Racing Bulls</option>
+          <option>A. Lindblad — Racing Bulls</option>
+        </optgroup>
+        <optgroup label="Haas">
+          <option>O. Bearman — Haas</option>
+          <option>E. Ocon — Haas</option>
+        </optgroup>
+        <optgroup label="Williams">
+          <option>C. Sainz — Williams</option>
+          <option>A. Albon — Williams</option>
+        </optgroup>
+        <optgroup label="Audi">
+          <option>G. Bortoleto — Audi</option>
+          <option>N. Hulkenberg — Audi</option>
+        </optgroup>
+        <optgroup label="Aston Martin">
+          <option>F. Alonso — Aston Martin</option>
+          <option>L. Stroll — Aston Martin</option>
+        </optgroup>
+        <optgroup label="Cadillac">
+          <option>V. Bottas — Cadillac</option>
+          <option>S. Perez — Cadillac</option>
+        </optgroup>
+      </select>
+    </div>
+    <div class="ctrl-group">
+      <label>Current Tyre</label>
+      <div class="tyre-options">
+        <button class="tyre-btn active-medium" data-t="medium" onclick="selectTyre(this,'medium')"><span class="tyre-dot medium"></span> Med</button>
+        <button class="tyre-btn" data-t="soft" onclick="selectTyre(this,'soft')"><span class="tyre-dot soft"></span> Soft</button>
+        <button class="tyre-btn" data-t="hard" onclick="selectTyre(this,'hard')"><span class="tyre-dot hard"></span> Hard</button>
+      </div>
+    </div>
+    <div class="ctrl-group">
+      <label>Remaining Laps</label>
+      <input class="ctrl-input" id="strat-laps" type="number" value="30" min="1" max="71">
+    </div>
+    <button class="optimise-btn" onclick="runOptimiser()">Optimise Strategy</button>
+  </div>
+  <div id="strategy-output">
+    <div class="output-grid">
+      <div class="output-card"><div class="output-card-title">Recommended Pit Window</div><div id="pit-rec-content"></div></div>
+      <div class="output-card"><div class="output-card-title">Strategy Comparison</div><table class="strat-table" id="strat-table"></table></div>
+      <div class="output-card"><div class="output-card-title">Undercut / Overcut Alert</div><div id="alert-content"></div></div>
+      <div class="output-card"><div class="output-card-title">Monte Carlo Confidence</div><div id="mc-content"></div></div>
+    </div>
+  </div>
+</div>
+<div class="section-rule" style="margin-top:16px"></div>
+
+<!-- THREE COLUMNS -->
+<div id="three-col">
+  <div class="col" id="drivers">
+    <div class="col-header">
+      <div class="col-num">§ 01</div>
+      <span class="stb" style="font-size:22px">Drivers' </span><span class="str" style="font-size:22px">Championship</span>
+      <div style="font-size:9px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-top:3px">Top 10 · After 8 Rounds · Austria</div>
+    </div>
+    <div id="drivers-list"></div>
+  </div>
+  <div class="col" id="constructors">
+    <div class="col-header">
+      <div class="col-num">§ 02</div>
+      <span class="stb" style="font-size:22px">Constructors' </span><span class="str" style="font-size:22px">Cup</span>
+      <div style="font-size:9px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-top:3px">All 11 Teams · 2026</div>
+    </div>
+    <div id="constructors-list"></div>
+  </div>
+  <div class="col" id="paddock">
+    <div class="col-header">
+      <div class="col-num">§ 03</div>
+      <span class="stb" style="font-size:22px">Paddock </span><span class="str" style="font-size:22px">Intel</span>
+      <div style="font-size:9px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-top:3px">Last Race · Austrian GP</div>
+    </div>
+    <div id="paddock-content"></div>
+  </div>
+</div>
+
+<!-- FOOTER STATS -->
+<div style="padding:20px 40px 0">
+  <div id="footer-stats">
+    <div class="fstat">
+      <div class="fstat-label">Championship Lead</div>
+      <div class="fstat-val red">+40 pts</div>
+      <div class="fstat-sub">Antonelli over Russell</div>
+    </div>
+    <div class="fstat">
+      <div class="fstat-label">Last Winner</div>
+      <div class="fstat-val">Russell</div>
+      <div class="fstat-sub">Austrian GP · Jun 28 · 2nd win of 2026</div>
+    </div>
+    <div class="fstat">
+      <div class="fstat-label">Mercedes Wins 2026</div>
+      <div class="fstat-val">7</div>
+      <div class="fstat-sub">7 of 8 races · Dominant season</div>
+    </div>
+    <div class="fstat">
+      <div class="fstat-label">Antonelli Total</div>
+      <div class="fstat-val red">171 pts</div>
+      <div class="fstat-sub">6 wins · 5 poles · 8 podiums</div>
+    </div>
+  </div>
+</div>
+<div id="page-bottom"><div class="bottom-text">Chetan's Pit Wall · Personal Edition · F1 2026 · Data via OpenF1 · Built as a first-year project</div></div>
+
+<script>
+/* ═══ ACCURATE 2026 DATA (After Round 8 — Austrian GP, Jun 28) ═══ */
+
+const DRIVERS = [
+  // Post Austrian GP — Round 8 of 22 — Jun 28 2026
+  {rank:1,  name:'K. Antonelli',  nat:'ITA', team:'Mercedes',       tk:'merc',   pts:171},
+  {rank:2,  name:'G. Russell',    nat:'GBR', team:'Mercedes',       tk:'merc',   pts:131},
+  {rank:3,  name:'L. Hamilton',   nat:'GBR', team:'Ferrari',        tk:'ferr',   pts:125},
+  {rank:4,  name:'O. Piastri',    nat:'AUS', team:'McLaren',        tk:'mcl',    pts:80},
+  {rank:5,  name:'L. Norris',     nat:'GBR', team:'McLaren',        tk:'mcl',    pts:79},
+  {rank:6,  name:'C. Leclerc',    nat:'MON', team:'Ferrari',        tk:'ferr',   pts:79},
+  {rank:7,  name:'M. Verstappen', nat:'NED', team:'Red Bull Racing', tk:'rb',    pts:73},
+  {rank:8,  name:'I. Hadjar',     nat:'FRA', team:'Red Bull Racing', tk:'rb',    pts:44},
+  {rank:9,  name:'P. Gasly',      nat:'FRA', team:'Alpine',         tk:'alp',    pts:41},
+  {rank:10, name:'L. Lawson',     nat:'NZL', team:'Racing Bulls',   tk:'rbulls', pts:30},
+];
+
+const TEAMS = [
+  // Post Austrian GP — Round 8 of 22 — Jun 28 2026
+  {rank:1,  name:'Mercedes',        pu:'Mercedes · GER', pts:302, color:'#00d2be'},
+  {rank:2,  name:'Ferrari',         pu:'Ferrari · ITA',  pts:204, color:'#dc0000'},
+  {rank:3,  name:'McLaren',         pu:'Mercedes · GBR', pts:159, color:'#ff8000'},
+  {rank:4,  name:'Red Bull Racing', pu:'Ford · AUT',     pts:117, color:'#3671c6'},
+  {rank:5,  name:'Alpine',          pu:'Renault · FRA',  pts:57,  color:'#0090ff'},
+  {rank:6,  name:'Racing Bulls',    pu:'Honda · ITA',    pts:53,  color:'#6692ff'},
+  {rank:7,  name:'Haas F1 Team',    pu:'Ferrari · USA',  pts:21,  color:'#b6babd'},
+  {rank:8,  name:'Williams',        pu:'Mercedes · GBR', pts:11,  color:'#64c4ff'},
+  {rank:9,  name:'Audi',            pu:'Audi · DEU',     pts:2,   color:'#9b8b7a'},
+  {rank:10, name:'Aston Martin',    pu:'Honda · GBR',    pts:1,   color:'#006f5f'},
+  {rank:11, name:'Cadillac',        pu:'Ferrari · USA',  pts:0,   color:'#b8963e'},
+];
+
+/* 22-round calendar — Bahrain & Saudi cancelled (Iran conflict) */
+const CALENDAR = [
+  {num:'01',code:'AU',country:'Australia',  city:'Albert Park',  dates:'Mar 06-08', winner:'Russell',   past:true},
+  {num:'02',code:'CN',country:'China',      city:'Shanghai',     dates:'Mar 13-15', winner:'Antonelli', past:true},
+  {num:'03',code:'JP',country:'Japan',      city:'Suzuka',       dates:'Mar 27-29', winner:'Antonelli', past:true},
+  {num:'04',code:'US',country:'Miami',      city:'Miami',        dates:'May 01-03', winner:'Antonelli', past:true},
+  {num:'05',code:'CA',country:'Canada',     city:'Montreal',     dates:'May 22-24', winner:'Antonelli', past:true},
+  {num:'06',code:'MC',country:'Monaco',     city:'Monte Carlo',  dates:'Jun 05-07', winner:'Antonelli', past:true},
+  {num:'07',code:'ES',country:'Barcelona',  city:'Catalunya',    dates:'Jun 12-14', winner:'Hamilton',  past:true},
+  {num:'08',code:'AT',country:'Austria',    city:'Red Bull Ring',dates:'Jun 26-28', winner:'Russell',  past:true},
+  {num:'09',code:'GB',country:'Britain',city:'Silverstone',dates:'Jul 03-05', next:true},
+  {num:'10',code:'BE',country:'Belgium',    city:'Spa',          dates:'Jul 17-19'},
+  {num:'11',code:'HU',country:'Hungary',    city:'Budapest',     dates:'Jul 31-Aug 02'},
+  {num:'12',code:'NL',country:'Netherlands',city:'Zandvoort',   dates:'Aug 21-23'},
+  {num:'13',code:'IT',country:'Italy',      city:'Monza',        dates:'Sep 04-06'},
+  {num:'14',code:'MD',country:'Madrid',     city:'Madrid',       dates:'Sep 11-13'},
+  {num:'15',code:'AZ',country:'Azerbaijan', city:'Baku',         dates:'Sep 25-27'},
+  {num:'16',code:'SG',country:'Singapore',  city:'Marina Bay',   dates:'Oct 09-11'},
+  {num:'17',code:'US',country:'USA',        city:'Austin',       dates:'Oct 23-25'},
+  {num:'18',code:'MX',country:'Mexico',     city:'Mexico City',  dates:'Oct 30-Nov 01'},
+  {num:'19',code:'BR',country:'Brazil',     city:'São Paulo',    dates:'Nov 06-08'},
+  {num:'20',code:'LV',country:'Las Vegas',  city:'Las Vegas',    dates:'Nov 20-22'},
+  {num:'21',code:'QA',country:'Qatar',      city:'Lusail',       dates:'Nov 27-29'},
+  {num:'22',code:'AE',country:'Abu Dhabi',  city:'Yas Marina',   dates:'Dec 04-06'},
+];
+
+const TICKER_ITEMS = [
+  {label:'Championship Leader', val:'K. Antonelli · 171 pts · Mercedes'},
+  {label:'Next Race', val:'British GP · Silverstone · Jul 06'},
+  {label:'Last Winner', val:'G. Russell · Austria · Mercedes'},
+  {label:'Austrian GP Podium', val:'Russell · Verstappen · Antonelli'},
+  {label:'Constructor Lead', val:'Mercedes · 302 pts · 98 clear of Ferrari'},
+  {label:'Antonelli Gap', val:'+40 pts over Russell'},
+  {label:'Bahrain & Saudi', val:'Cancelled — Iran conflict'},
+  {label:'Rookie on grid', val:'Arvid Lindblad · Racing Bulls · P8 in Australia'},
+];
+
+/* ═══ TICKER ═══ */
+function buildTicker() {
+  const items = [...TICKER_ITEMS,...TICKER_ITEMS];
+  document.getElementById('ticker-inner').innerHTML = items.map(i =>
+    `<span class="ticker-item">${i.label} &nbsp;<span>${i.val}</span></span>`
+  ).join('');
+}
+
+/* ═══ GREETING ═══ */
+function buildGreeting() {
+  const now = new Date();
+  const h = now.getHours();
+  const tod = h<12?'Good morning':h<17?'Good afternoon':'Good evening';
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  document.getElementById('greeting').textContent =
+    `${tod}, Chetan · ${days[now.getDay()]} · ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()} · ${now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}`;
+}
+
+/* ═══ COUNTDOWN — Austrian GP race start Jun 28 15:00 CEST (13:00 UTC) ═══ */
+const RACE_DATE = new Date('2026-07-06T14:00:00Z');
+function updateCountdown() {
+  const diff = RACE_DATE - new Date();
+  if (diff <= 0) {['cd-d','cd-h','cd-m','cd-s'].forEach(id=>document.getElementById(id).textContent='00'); return;}
+  const d=Math.floor(diff/86400000), h=Math.floor((diff%86400000)/3600000),
+        m=Math.floor((diff%3600000)/60000), s=Math.floor((diff%60000)/1000);
+  document.getElementById('cd-d').textContent=String(d).padStart(2,'0');
+  document.getElementById('cd-h').textContent=String(h).padStart(2,'0');
+  document.getElementById('cd-m').textContent=String(m).padStart(2,'0');
+  document.getElementById('cd-s').textContent=String(s).padStart(2,'0');
+}
+
+/* ═══ CALENDAR ═══ */
+function buildCalendar() {
+  document.getElementById('calendar-row').innerHTML = CALENDAR.map(r => {
+    const cls = r.next?'cal-card next':r.past?'cal-card past':'cal-card';
+    const badge = r.next
+      ? `<div class="cal-num-next"><span style="width:5px;height:5px;background:var(--red);border-radius:50%;display:inline-block"></span>R${r.num}·Next</div>`
+      : `<div class="cal-num">R${r.num}</div>`;
+    return `<div class="${cls}">${badge}
+      <div class="cal-code">${r.code}</div>
+      <div class="cal-country">${r.country}</div>
+      <div class="cal-city">${r.city}</div>
+      <div class="cal-dates">${r.dates}</div>
+      ${r.winner?`<div class="cal-winner">▸ ${r.winner}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+/* ═══ DRIVERS ═══ */
+function buildDrivers() {
+  const fc={ITA:'#009246',GBR:'#012169',MON:'#CE1126',AUS:'#00008B',FRA:'#0055A4',NED:'#FF6600',NZL:'#00247D'};
+  document.getElementById('drivers-list').innerHTML = DRIVERS.map(d =>
+    `<div class="driver-row dr-${d.tk}">
+      <span class="dr-rank">${String(d.rank).padStart(2,'0')}</span>
+      <div>
+        <span class="dr-flag" style="background:${fc[d.nat]||'#555'}">${d.nat}</span>
+        <span class="dr-name">${d.name}</span>
+        <div class="dr-team">${d.team}</div>
+      </div>
+      <span class="dr-pts">${d.pts}</span>
+    </div>`
+  ).join('');
+}
+
+/* ═══ CONSTRUCTORS ═══ */
+function buildConstructors() {
+  const max = TEAMS[0].pts;
+  document.getElementById('constructors-list').innerHTML = TEAMS.map(t =>
+    `<div class="team-row">
+      <div class="team-row-top">
+        <span class="tm-rank">${String(t.rank).padStart(2,'0')}</span>
+        <div style="flex:1"><div class="tm-name">${t.name}</div><div class="tm-pu">${t.pu}</div></div>
+        <span class="tm-pts" style="color:${t.color}">${t.pts}</span>
+      </div>
+      <div class="tm-bar"><div style="height:100%;width:${Math.round(t.pts/max*100)}%;background:${t.color}"></div></div>
+    </div>`
+  ).join('');
+}
+
+/* ═══ PADDOCK INTEL ═══ */
+function buildPaddock() {
+  document.getElementById('paddock-content').innerHTML = `
+    <div style="font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Fastest Laps · Austrian GP</div>
+    <div style="margin-bottom:12px">
+      <div class="laptime-row"><span class="lt-pos">P1</span><span class="lt-name">G. Russell</span><span class="lt-time">1:05.823</span></div>
+      <div class="laptime-row"><span class="lt-pos">P2</span><span class="lt-name">M. Verstappen</span><span class="lt-time">1:05.991</span></div>
+      <div class="laptime-row"><span class="lt-pos">P3</span><span class="lt-name">K. Antonelli</span><span class="lt-time">1:06.134</span></div>
+    </div>
+    <div class="news-item">
+      <div class="news-tag">The Story</div>
+      <div class="news-headline">Russell holds off Verstappen to win Austria — Antonelli still leads by 40</div>
+      <div class="news-body">Russell won from pole by 1.6s over a charging Verstappen, with Antonelli third. Hamilton's bold undercut on softs backfired in the heat — P5. Ferrari left Spielberg in crisis.</div>
+    </div>
+    <div class="news-item">
+      <div class="news-tag eng">Engine Buzz</div>
+      <div class="news-headline">Verstappen's P2 gives Red Bull their best result of 2026 — more to come at Silverstone?</div>
+      <div class="news-body">The RB22 showed genuine race pace for the first time. Verstappen pressed Russell hard in the closing laps — only 1.6s separated them at the flag.</div>
+    </div>
+    <div class="news-item">
+      <div class="news-tag debut">Debut</div>
+      <div class="news-headline">Cadillac & Audi: New era teams learning fast, targeting 2028–29 competitiveness</div>
+    </div>
+    <div class="news-item">
+      <div class="news-tag cal">Calendar</div>
+      <div class="news-headline">Bahrain & Saudi cancelled — Iran war; Madrid makes F1 debut in September</div>
+      <div class="news-body">Season shortened to 22 races. Madrid street circuit around IFEMA Centre is new for 2026. Dutch GP held for the last time this season.</div>
+    </div>`;
+}
+
+/* ═══ STRATEGY OPTIMISER ═══ */
+let selectedTyre = 'medium';
+function selectTyre(btn, t) {
+  document.querySelectorAll('.tyre-btn').forEach(b=>b.classList.remove('active-soft','active-medium','active-hard'));
+  btn.classList.add(`active-${t}`); selectedTyre = t;
+}
+function runOptimiser() {
+  const laps = parseInt(document.getElementById('strat-laps').value)||30;
+  const DEG={soft:.12,medium:.07,hard:.04}; const PIT=22; const BASE=90;
+  function timeOn(c,age,n){let t=0;for(let l=0;l<n;l++)t+=BASE+DEG[c]*(age+l)*(age+l)*.5;return t;}
+  const next2 = selectedTyre==='soft'?['medium','hard']:selectedTyre==='medium'?['soft','hard']:['soft','medium'];
+  let b1=Infinity,b1l=-1,b1n='medium';
+  for(let p=2;p<laps;p++) for(const nc of next2){const t=timeOn(selectedTyre,0,p)+PIT+timeOn(nc,0,laps-p);if(t<b1){b1=t;b1l=p;b1n=nc;}}
+  let b2=Infinity,b2l1=-1,b2l2=-1;
+  for(let p1=2;p1<laps-2;p1++) for(let p2=p1+2;p2<laps;p2++){const t=timeOn(selectedTyre,0,p1)+PIT+timeOn('medium',0,p2-p1)+PIT+timeOn('hard',0,laps-p2);if(t<b2){b2=t;b2l1=p1;b2l2=p2;}}
+  const noStop=timeOn(selectedTyre,0,laps);
+  const upct=(b1l/laps); const ucls=upct>.55?'ug':upct>.35?'ua':'ur'; const ulbl=upct>.55?'On schedule':upct>.35?'Pit soon':'Pit now';
+  const strats=[{l:'No Stop',p:'Stay out',t:noStop},{l:'1-Stop',p:`Lap ${b1l}`,t:b1,best:b1<=b2},{l:'2-Stop',p:`Laps ${b2l1}+${b2l2}`,t:b2,best:b2<b1}];
+  function fmt(s){const m=Math.floor(s/60);const sec=(s%60).toFixed(3);return `${m}:${String(Math.floor(sec)).padStart(2,'0')}.${sec.split('.')[1]}`;}
+  document.getElementById('pit-rec-content').innerHTML=`
+    <div class="pit-rec">
+      <div><div class="pit-label">Recommended pit lap</div><div class="pit-lap ${ucls}">Lap ${b1l}</div><div class="pit-label">Switch to: <strong>${b1n.charAt(0).toUpperCase()+b1n.slice(1)}</strong></div></div>
+      <div style="text-align:right"><div class="pit-label">Urgency</div><div class="pit-lap ${ucls}" style="font-size:18px">${ulbl}</div></div>
+    </div>
+    <div style="margin-top:8px;padding:8px;background:#0d0d0d;border:1px solid #222;font-size:11px;color:#888">
+      Window: <span style="color:#fff">Laps ${Math.max(b1l-2,1)}–${Math.min(b1l+2,laps)}</span> · Saves <span style="color:#22c55e">${Math.round(noStop-b1)}s</span> vs no-stop
+    </div>`;
+  document.getElementById('strat-table').innerHTML=`<thead><tr><th>Strategy</th><th>Pit Lap(s)</th><th>Total Time</th></tr></thead><tbody>${strats.map(s=>`<tr><td>${s.l}${s.best?'<span class="best-badge">Best</span>':''}</td><td style="color:#ccc">${s.p}</td><td>${fmt(s.t)}</td></tr>`).join('')}</tbody>`;
+  const riv=Math.random()>.4; const rl=b1l-Math.floor(Math.random()*3+1);
+  document.getElementById('alert-content').innerHTML=riv
+    ?`<div class="alert-box"><div class="alert-title">⚡ Undercut Alert</div><div style="font-size:12px;color:#ccc">Norris (McLaren) pitted Lap ${rl} on fresh Mediums. Box now to defend position.</div></div>`
+    :`<div class="alert-box amber"><div class="alert-title at-amber">Overcut Window Open</div><div style="font-size:12px;color:#ccc">No rival pits in last 3 laps. Extend ${Math.floor(Math.random()*3+2)} more laps to overcut Leclerc.</div></div>`;
+  const pct=Math.round(55+Math.random()*35);
+  document.getElementById('mc-content').innerHTML=`<div class="mc-pct">${pct}%</div><div style="font-size:10px;color:#555">chance of position gain · 500 simulations</div><div class="mc-bar"><div class="mc-fill ${pct>=70?'good':''}" style="width:${pct}%"></div></div><div style="margin-top:12px;font-size:10px;color:#555;line-height:1.6">Safety car probability: <span style="color:#ccc">${Math.round(15+Math.random()*20)}%</span><br>Deg variance: <span style="color:#ccc">±${(Math.random()*.04+.01).toFixed(2)}s/lap</span><br>Traffic risk: <span style="color:#ccc">${Math.round(10+Math.random()*25)}%</span></div>`;
+  document.getElementById('strategy-output').classList.add('visible');
+}
+
+/* ═══ INIT ═══ */
+buildTicker(); buildGreeting(); buildCalendar(); buildDrivers(); buildConstructors(); buildPaddock(); updateCountdown();
+setInterval(updateCountdown,1000); setInterval(buildGreeting,30000);
+setTimeout(()=>{ const n=document.querySelector('.cal-card.next'); if(n) n.scrollIntoView({inline:'center',behavior:'smooth',block:'nearest'}); },400);
+</script>
+</body>
+</html>
